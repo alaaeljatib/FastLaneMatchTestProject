@@ -25,7 +25,7 @@ platform :ios do
   desc "Tag a build on GitHub"
   lane :tag do
     current_date = Time.now.strftime("%Y_%m_%d")
-    new_version = "1.2.3"
+    new_version = ENV['HELLO']
 
     add_git_tag(tag: current_date + "_v" + new_version)
 
