@@ -32,6 +32,7 @@ platform :ios do
     commit_version_bump(
       message: "Increment build and version. [skip ci]",# create a commit with a custom message
     )
+    sh "git push origin HEAD:#{ENV['BUILDKITE_BRANCH']} --tags"
   end
 
   desc "Runs all the tests"
