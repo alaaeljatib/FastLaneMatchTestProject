@@ -36,10 +36,10 @@ platform :ios do
   end
 
   lane :testVersion do
-    increment_build_number
+    build_number = increment_build_number
 
     commit_version_bump(
-      message: "Increment build. [skip ci]"
+      message: "Increment build to " + build_number + ". [skip ci]"
     )
 
     sh "git push origin HEAD:develop"
