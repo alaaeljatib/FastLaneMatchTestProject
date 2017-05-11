@@ -408,6 +408,7 @@
 				D54B03FC1EC2482D004758E7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D58B5BE11EC0F17800FA8762 /* Build configuration list for PBXProject "FastLaneMatchTestProject" */ = {
 			isa = XCConfigurationList;
