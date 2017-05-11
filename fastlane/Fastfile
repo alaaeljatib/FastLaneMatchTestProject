@@ -35,6 +35,68 @@ platform :ios do
     sh "git push origin HEAD:master --tags"
   end
 
+  lane :testVersion do
+    increment_build_number
+
+    commit_version_bump(
+      message: "Increment build. [skip ci]"
+    )
+
+    sh "git push origin HEAD:#{ENV['BUILDKITE_BRANCH']}"
+  end
+
+  def set_new_version()
+    last_tag_version = last_git_tag
+    current_version = ENV['HELLO']
+    version_array = current_version.split('/')[-1].split('.')
+
+    new_version = 0
+    minor_version = 0
+
+    unless last_tag_version.nil?
+      last_tag_version_array = last_tag_version.split('v')[-1].split('.')
+
+      for i in 0..2
+        if (version_array[i].to_i < last_tag_version_array[i].to_i)
+          version_array = last_tag_version_array
+          minor_version = version_array[-1].strip.to_i
+          minor_version += 1
+          break
+        elsif version_array[i].to_i > last_tag_version_array[i].to_i
+          minor_version = version_array[-1].strip.to_i
+          break
+        end
+      end
+
+      check = false
+      for i in 0..2
+        if (version_array[i].to_i == last_tag_version_array[i].to_i)
+          check = true
+        elsif version_array[i].to_i != last_tag_version_array[i].to_i
+          check = false
+          break
+        end
+      end
+
+      if check == true
+        version_array = last_tag_version_array
+        minor_version = version_array[-1].strip.to_i
+        minor_version += 1
+      end
+
+    else
+      minor_version = version_array[-1].strip.to_i
+    end
+
+    version_array[-1] = minor_version
+    new_version = version_array.join(".")
+
+    increment_build_number
+    increment_version_number(version_number: new_version)
+
+    return new_version
+  end
+
   #hehehehe
 
   desc "Runs all the tests"

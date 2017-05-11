@@ -35,6 +35,11 @@ xcode-select --install
 fastlane ios tag
 ```
 Tag a build on GitHub
+### ios testVersion
+```
+fastlane ios testVersion
+```
+
 ### ios test
 ```
 fastlane ios test
