@@ -42,7 +42,7 @@ platform :ios do
       message: "Increment build. [skip ci]"
     )
 
-    sh "git push origin HEAD:#{ENV['BUILDKITE_BRANCH']}"
+    sh "git push origin HEAD:develop"
   end
 
   def set_new_version()
