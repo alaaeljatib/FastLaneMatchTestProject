@@ -38,12 +38,18 @@ platform :ios do
   lane :testVersion do
     build_number = increment_build_number
 
-    commit_version_bump(
-      message: "Increment build to " + build_number + ". [skip ci]"
-    )
+  message = "Increment version number to #{build_number} .[skip ci]"
+      commit_new_version(message)
+  end
 
+  def commit_new_version(message)
+    sh "git add ../${PROJECT}/Info.plist"    
+    sh "git add ../${PROJECT}UITests/Info.plist" 
+    sh "git add ../${PROJECT}.xcodeproj/project.pbxproj"
+    sh "git commit -m \"#{message}\""
     sh "git push origin HEAD:develop"
   end
+
 
   def set_new_version()
     last_tag_version = last_git_tag
