@@ -34,8 +34,9 @@ platform :ios do
   end
 
   lane :testVersion do
-    new_version = set_new_version()
 
+    new_version = set_new_version()
+    release_branch = ENV['HELLO']
       message = "Increment version number to #{new_version} .[skip ci]"
       commit_new_version(message, ENV['HELLO'])
 
@@ -44,6 +45,8 @@ platform :ios do
       sh "git pull origin develop"
       increment_version_number(version_number: new_version)
       commit_new_version(message, "develop")
+
+       sh "git checkout #{release_branch}"
   end
 
   def commit_new_version(message, branch)
