@@ -30,7 +30,7 @@ platform :ios do
     # sh "git tag -d #{new_tag}"
     add_git_tag(tag: new_tag)
     # sh "git push origin :#{new_tag}"
-    sh "git push origin HEAD:master --tags"
+    sh "git push origin HEAD:#{ENV['HELLO']} --tags"
   end
 
   lane :testVersion do
