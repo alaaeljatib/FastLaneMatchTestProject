@@ -26,28 +26,32 @@ platform :ios do
   lane :tag do
     current_date = Time.now.strftime("%Y_%m_%d")
     new_version = ENV['HELLO']
-
-    add_git_tag(tag: current_date + "_v" + new_version)
-
-    commit_version_bump(
-      message: "Increment build and version. [skip ci]",# create a commit with a custom message
-    )
+    new_tag = current_date + "_v" + new_version
+    sh "git tag -d #{new_tag}"
+    add_git_tag(tag: new_tag)
+    sh "git push origin :#{new_tag}"
     sh "git push origin HEAD:master --tags"
   end
 
   lane :testVersion do
-    build_number = increment_build_number
+    new_version = set_new_version()
 
-  message = "Increment version number to #{build_number} .[skip ci]"
-      commit_new_version(message)
+      message = "Increment version number to #{new_version} .[skip ci]"
+      commit_new_version(message, ENV['HELLO'])
+
+      # reflect version number on develop
+      sh "git checkout develop"
+      sh "git pull origin develop"
+      increment_version_number(version_number: new_version)
+      commit_new_version(message, "develop")
   end
 
-  def commit_new_version(message)
+  def commit_new_version(message, branch)
     sh "git add ../${PROJECT}/Info.plist"    
     sh "git add ../${PROJECT}UITests/Info.plist" 
     sh "git add ../${PROJECT}.xcodeproj/project.pbxproj"
     sh "git commit -m \"#{message}\""
-    sh "git push origin HEAD:develop"
+    sh "git push origin HEAD:#{branch}"
   end
 
 
