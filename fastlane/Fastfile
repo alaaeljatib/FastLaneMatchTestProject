@@ -25,11 +25,11 @@ platform :ios do
   desc "Tag a build on GitHub"
   lane :tag do
     current_date = Time.now.strftime("%Y_%m_%d")
-    new_version = ENV['HELLO']
+    new_version = get_version_number
     new_tag = current_date + "_v" + new_version
-    sh "git tag -d #{new_tag}"
+    # sh "git tag -d #{new_tag}"
     add_git_tag(tag: new_tag)
-    sh "git push origin :#{new_tag}"
+    # sh "git push origin :#{new_tag}"
     sh "git push origin HEAD:master --tags"
   end
 
